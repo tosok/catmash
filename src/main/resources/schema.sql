@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS cat (
+  id VARCHAR(10) NULL,
+  url VARCHAR(62) NULL,
+  rank int DEFAULT 0
+);
