@@ -32,22 +32,11 @@ public class CatControllerTest {
     @Test
     public void testGetAllCats_nominalCase() throws Exception {
         Mockito.when(catRepository.findAllByOrderByRankDesc())
-                .thenReturn(Arrays.asList(
-                        Cat.builder()
-                            .id(RandomString.make(10))
-                            .rank(100)
-                            .url("http://random-image.to")
-                            .build(),
-                        Cat.builder()
-                            .id(RandomString.make(10))
-                            .rank(23)
-                            .url("http://random-image.to")
-                            .build(),
-                        Cat.builder()
-                            .id(RandomString.make(10))
-                            .rank(1)
-                            .url("http://random-image.to")
-                            .build()));
+                .thenReturn(
+                        Arrays.asList(
+                                new Cat(RandomString.make(10), "http://random-image.to", 100),
+                                new Cat(RandomString.make(10), "http://random-image.to", 23),
+                                new Cat(RandomString.make(10), "http://random-image.to", 1)));
 
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get("/cats")
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -60,16 +49,8 @@ public class CatControllerTest {
     public void testGetTwoRandomCats_nominalCase() throws Exception {
         Mockito.when(catRepository.findTwoRandomCats())
                 .thenReturn(Arrays.asList(
-                        Cat.builder()
-                                .id(RandomString.make(10))
-                                .rank(100)
-                                .url("http://random-image.to")
-                                .build(),
-                        Cat.builder()
-                                .id(RandomString.make(10))
-                                .rank(1)
-                                .url("http://random-image.to")
-                                .build()));
+                        new Cat(RandomString.make(10), "http://random-image.to", 100),
+                        new Cat(RandomString.make(10), "http://random-image.to", 1)));
 
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get("/cats/random")
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -82,12 +63,7 @@ public class CatControllerTest {
     public void testVote_nominalCase() throws Exception {
         String id = "12345";
         Mockito.when(catRepository.findById(id))
-                .thenReturn(Optional.of(
-                        Cat.builder()
-                                .id(id)
-                                .rank(100)
-                                .url("http://random-image.to")
-                                .build()));
+                .thenReturn(Optional.of(new Cat(id, "http://random-image.to", 100)));
 
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.post("/cats/"+id+"/vote")
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
